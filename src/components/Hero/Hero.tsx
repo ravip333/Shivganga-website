@@ -8,6 +8,7 @@ import {
   ChevronRight,
   ExternalLink,
   Images,
+  PartyPopper,
 } from 'lucide-react';
 import type { HeroSlide } from '../../types';
 
@@ -23,6 +24,7 @@ interface HeroProps {
 export const Hero: React.FC<HeroProps> = ({
   shortName,
   tagline,
+  heroHeadline,
   heroSubheadline,
   slides,
   googleMapsUrl,
@@ -72,7 +74,7 @@ export const Hero: React.FC<HeroProps> = ({
   return (
     <section
       id="home"
-      className="relative min-h-[92vh] flex items-center pt-20 pb-16 overflow-hidden bg-slate-950"
+      className="relative min-h-[92vh] flex items-center pt-24 pb-16 overflow-hidden bg-slate-950"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       aria-label="Shivganga CHS Background Slider"
@@ -100,143 +102,136 @@ export const Hero: React.FC<HeroProps> = ({
           );
         })}
 
-        {/* Sober, multi-layered vignette for optimal text readability */}
-        <div className="absolute inset-0 z-15 bg-gradient-to-t from-slate-950 via-slate-950/45 to-slate-950/65" />
-        <div className="absolute inset-0 z-15 bg-gradient-to-r from-slate-950/80 via-slate-950/30 to-transparent" />
+        {/* Multi-layered vignette for optimal text readability */}
+        <div className="absolute inset-0 z-15 bg-gradient-to-t from-slate-950 via-slate-950/45 to-slate-950/70" />
+        <div className="absolute inset-0 z-15 bg-gradient-to-r from-slate-950/85 via-slate-950/35 to-transparent" />
       </div>
 
       {/* Main Hero Content */}
       <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-        <div className="max-w-2xl text-left">
-          {/* Sober Pill Tag */}
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/90 backdrop-blur-md border border-white/60 text-slate-800 text-xs font-semibold mb-5 shadow-xs">
-            <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
-            <span className="text-emerald-900 font-bold uppercase tracking-wider text-[11px]">
+        <div className="max-w-3xl text-left">
+          {/* Unique Tagline Live Badge (Tech Agency / Modern Style) */}
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/95 backdrop-blur-md border border-white/60 text-slate-800 text-xs font-semibold mb-6 shadow-md shadow-black/10">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span className="text-emerald-950 font-bold uppercase tracking-wider text-[11px]">
               {tagline}
             </span>
           </div>
 
-          {/* Simple, Sober Main Heading */}
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-extrabold text-white tracking-tight leading-[1.12]">
-            {shortName}
+          {/* Main Heading with High-Contrast Typography */}
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-extrabold text-white tracking-tight leading-[1.14]">
+            {heroHeadline}
           </h1>
 
-          {/* Concise Subheadline */}
-          <p className="mt-4 text-base sm:text-lg text-slate-200 leading-relaxed font-normal max-w-xl">
+          {/* Subheadline with Generous Readability */}
+          <p className="mt-4 text-base sm:text-lg text-slate-200 leading-relaxed font-normal max-w-2xl">
             {heroSubheadline}
           </p>
 
-          {/* Current Slide Badge */}
-          <div className="mt-3 flex items-center gap-2 text-xs font-medium text-emerald-300">
-            <span className="px-2 py-0.5 rounded-md bg-emerald-950/80 border border-emerald-500/40 text-[11px] font-semibold uppercase">
+          {/* Current Active Slide Label */}
+          <div className="mt-4 flex items-center gap-2.5 text-xs font-medium text-emerald-300">
+            <span className="px-2.5 py-0.5 rounded-md bg-emerald-950/90 border border-emerald-500/50 text-[11px] font-bold uppercase tracking-wider">
               {activeSlide.badge}
             </span>
-            <span className="text-slate-300">{activeSlide.title}</span>
+            <span className="text-slate-300 font-medium">{activeSlide.title}</span>
           </div>
 
           {/* Action Buttons */}
-          <div className="mt-8 flex flex-wrap items-center gap-3">
+          <div className="mt-8 flex flex-wrap items-center gap-3.5">
             <a
-              href="#collages"
-              onClick={(e) => scrollToSection(e, '#collages')}
-              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold text-slate-900 bg-white hover:bg-slate-100 transition-all shadow-md hover:shadow-lg cursor-pointer"
+              href="#photos"
+              onClick={(e) => scrollToSection(e, '#photos')}
+              className="inline-flex items-center gap-2 px-5 py-3.5 rounded-xl text-xs sm:text-sm font-bold text-slate-950 bg-white hover:bg-slate-100 transition-all shadow-lg hover:shadow-xl cursor-pointer hover:scale-102"
             >
               <Images className="w-4 h-4 text-emerald-700" />
-              <span>View Photo Collages</span>
+              <span>Explore Photo Gallery</span>
             </a>
+
             <a
-              href="#about"
-              onClick={(e) => scrollToSection(e, '#about')}
-              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold text-white bg-emerald-700 hover:bg-emerald-800 transition-all shadow-md cursor-pointer"
+              href="#celebrations"
+              onClick={(e) => scrollToSection(e, '#celebrations')}
+              className="inline-flex items-center gap-2 px-5 py-3.5 rounded-xl text-xs sm:text-sm font-bold text-white bg-emerald-700 hover:bg-emerald-800 transition-all shadow-lg cursor-pointer hover:scale-102"
             >
-              <Building2 className="w-4 h-4" />
-              <span>Building Details</span>
+              <PartyPopper className="w-4 h-4" />
+              <span>Festivals & Celebrations</span>
             </a>
+
             <a
               href={googleMapsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold text-white/90 hover:text-white border border-white/30 hover:border-white/60 bg-white/5 backdrop-blur-sm transition-all"
+              className="inline-flex items-center gap-2 px-4 py-3.5 rounded-xl text-xs sm:text-sm font-semibold text-white/95 hover:text-white border border-white/30 hover:border-white/60 bg-white/10 backdrop-blur-md transition-all cursor-pointer"
             >
               <ExternalLink className="w-4 h-4 text-emerald-400" />
               <span>Google Maps</span>
             </a>
           </div>
 
-          {/* 4 Clean Key Specs Pills */}
-          <div className="mt-10 pt-6 border-t border-white/15 grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
-            <div className="bg-white/10 backdrop-blur-md rounded-xl p-3 border border-white/15 text-white">
-              <div className="flex items-center gap-1.5 text-emerald-400 mb-0.5">
-                <Building2 className="w-3.5 h-3.5" />
-                <span className="text-[11px] font-semibold text-slate-300">Structure</span>
+          {/* 4 Clean Key Specs Blocks (Modern Justonclick.in Grid) */}
+          <div className="mt-12 pt-6 border-t border-white/15 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-3.5 border border-white/15 text-white hover:bg-white/15 transition-all">
+              <div className="flex items-center gap-1.5 text-emerald-400 mb-1">
+                <Building2 className="w-4 h-4" />
+                <span className="text-[11px] font-semibold text-slate-300">Architecture</span>
               </div>
-              <div className="text-xs font-bold text-white">Ground + 6 Floors</div>
+              <div className="text-sm font-bold text-white">Ground + 6 Floors</div>
+              <div className="text-[10px] text-slate-400 mt-0.5">Standalone Tower</div>
             </div>
 
-            <div className="bg-white/10 backdrop-blur-md rounded-xl p-3 border border-white/15 text-white">
-              <div className="flex items-center gap-1.5 text-emerald-400 mb-0.5">
-                <Car className="w-3.5 h-3.5" />
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-3.5 border border-white/15 text-white hover:bg-white/15 transition-all">
+              <div className="flex items-center gap-1.5 text-emerald-400 mb-1">
+                <Car className="w-4 h-4" />
                 <span className="text-[11px] font-semibold text-slate-300">Parking</span>
               </div>
-              <div className="text-xs font-bold text-white">Dedicated Ground Bays</div>
+              <div className="text-sm font-bold text-white">Dedicated Bays</div>
+              <div className="text-[10px] text-slate-400 mt-0.5">Demarcated Slots</div>
             </div>
 
-            <div className="bg-white/10 backdrop-blur-md rounded-xl p-3 border border-white/15 text-white">
-              <div className="flex items-center gap-1.5 text-emerald-400 mb-0.5">
-                <ArrowUpDown className="w-3.5 h-3.5" />
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-3.5 border border-white/15 text-white hover:bg-white/15 transition-all">
+              <div className="flex items-center gap-1.5 text-emerald-400 mb-1">
+                <ArrowUpDown className="w-4 h-4" />
                 <span className="text-[11px] font-semibold text-slate-300">Elevator</span>
               </div>
-              <div className="text-xs font-bold text-white">Passenger Lift (G-6)</div>
+              <div className="text-sm font-bold text-white">Passenger Lift</div>
+              <div className="text-[10px] text-slate-400 mt-0.5">Ground to 6th Floor</div>
             </div>
 
-            <div className="bg-white/10 backdrop-blur-md rounded-xl p-3 border border-white/15 text-white">
-              <div className="flex items-center gap-1.5 text-emerald-400 mb-0.5">
-                <ShieldCheck className="w-3.5 h-3.5" />
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-3.5 border border-white/15 text-white hover:bg-white/15 transition-all">
+              <div className="flex items-center gap-1.5 text-emerald-400 mb-1">
+                <ShieldCheck className="w-4 h-4" />
                 <span className="text-[11px] font-semibold text-slate-300">Security</span>
               </div>
-              <div className="text-xs font-bold text-white">24/7 Gate Watch</div>
+              <div className="text-sm font-bold text-white">24/7 Gate Watch</div>
+              <div className="text-[10px] text-slate-400 mt-0.5">Manned Checkpost</div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Auto Slider Controls (Previous / Next / Dots & Live Progress Bar) */}
-      <div className="absolute right-4 sm:right-8 bottom-6 z-30 flex items-center gap-2.5">
+      {/* Auto Slider Controls with Numbered Slide Indicator */}
+      <div className="absolute right-4 sm:right-8 bottom-6 z-30 flex items-center gap-3">
         {/* Previous Button */}
         <button
           type="button"
           onClick={prevSlide}
-          className="p-2 rounded-full bg-white/15 hover:bg-white/30 text-white backdrop-blur-md border border-white/20 transition-all focus:outline-none cursor-pointer"
+          className="p-2.5 rounded-full bg-white/15 hover:bg-white/30 text-white backdrop-blur-md border border-white/20 transition-all focus:outline-none cursor-pointer"
           aria-label="Previous slide"
         >
           <ChevronLeft className="w-4 h-4" />
         </button>
 
-        {/* Slide Indicators with Progress Bar */}
-        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-white/20">
-          {slides.map((_, i) => (
-            <button
-              key={i}
-              type="button"
-              onClick={() => {
-                setCurrentSlideIndex(i);
-                setProgress(0);
-              }}
-              className={`h-1.5 rounded-full transition-all cursor-pointer ${
-                i === currentSlideIndex
-                  ? 'w-6 bg-emerald-400'
-                  : 'w-2 bg-white/40 hover:bg-white/70'
-              }`}
-              aria-label={`Go to slide ${i + 1}`}
-            />
-          ))}
+        {/* Slide Counter e.g. 01 / 04 */}
+        <div className="px-3.5 py-1.5 rounded-full bg-black/50 backdrop-blur-md border border-white/20 text-xs font-mono font-bold text-white tracking-wider">
+          <span className="text-emerald-400">0{currentSlideIndex + 1}</span>
+          <span className="text-white/40 mx-1">/</span>
+          <span>0{slides.length}</span>
         </div>
 
         {/* Next Button */}
         <button
           type="button"
           onClick={nextSlide}
-          className="p-2 rounded-full bg-white/15 hover:bg-white/30 text-white backdrop-blur-md border border-white/20 transition-all focus:outline-none cursor-pointer"
+          className="p-2.5 rounded-full bg-white/15 hover:bg-white/30 text-white backdrop-blur-md border border-white/20 transition-all focus:outline-none cursor-pointer"
           aria-label="Next slide"
         >
           <ChevronRight className="w-4 h-4" />

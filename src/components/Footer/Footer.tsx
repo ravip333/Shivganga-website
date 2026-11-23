@@ -15,6 +15,7 @@ export const Footer: React.FC<FooterProps> = ({ data }) => {
     { label: 'Home', href: '#home' },
     { label: 'About Building', href: '#about' },
     { label: 'Building Amenities', href: '#amenities' },
+    { label: 'Celebrations & Festivals', href: '#celebrations' },
     { label: 'Photo & Video Collages', href: '#photos' },
     { label: 'Directions & Connectivity', href: '#location' },
     { label: 'Building Guidelines', href: '#contact' },

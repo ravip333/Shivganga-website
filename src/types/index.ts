@@ -15,16 +15,37 @@ export interface Amenity {
   badge: string;
 }
 
-export type MediaCategory = 'all' | 'elevation' | 'parking' | 'festivals' | 'videos';
+export type MediaCategory =
+  | 'all'
+  | 'elevation'
+  | 'parking'
+  | 'holi'
+  | 'mens_day'
+  | 'festivals'
+  | 'national'
+  | 'videos';
 
 export interface PhotoItem {
   id: string;
   title: string;
-  category: 'elevation' | 'parking' | 'festivals';
+  category: MediaCategory;
   categoryLabel: string;
   imageUrl: string;
   caption: string;
+  date?: string;
   featured?: boolean;
+}
+
+export interface CelebrationItem {
+  id: string;
+  name: string;
+  category: MediaCategory;
+  season: string;
+  description: string;
+  highlights: string[];
+  coverImage: string;
+  badge: string;
+  accentColor: string;
 }
 
 export interface VideoItem {
@@ -61,6 +82,7 @@ export interface SocietyData {
   overview: string[];
   amenities: Amenity[];
   heroSlides: HeroSlide[];
+  celebrations: CelebrationItem[];
   photos: PhotoItem[];
   videos: VideoItem[];
   connectivity: ConnectivityItem[];

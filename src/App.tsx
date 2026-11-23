@@ -1,22 +1,41 @@
+import { useState } from 'react';
 import { Navbar } from './components/Navbar/Navbar';
 import { Hero } from './components/Hero/Hero';
 import { AboutSociety } from './components/AboutSociety/AboutSociety';
 import { Facilities } from './components/Facilities/Facilities';
+import { Celebrations } from './components/Celebrations/Celebrations';
 import { Gallery } from './components/Gallery/Gallery';
 import { Location } from './components/Location/Location';
 import { Contact } from './components/Contact/Contact';
 import { Footer } from './components/Footer/Footer';
 import { societyData } from './data/societyData';
+import type { MediaCategory } from './types';
 
 export function App() {
+  const [selectedGalleryCategory, setSelectedGalleryCategory] = useState<MediaCategory>('all');
+  const [isUploadOpen, setIsUploadOpen] = useState(false);
+
+  const handleSelectCelebration = (category: MediaCategory) => {
+    setSelectedGalleryCategory(category);
+    const photosEl = document.getElementById('photos');
+    if (photosEl) {
+      photosEl.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const handleOpenUploadFromCelebration = (category: MediaCategory) => {
+    setSelectedGalleryCategory(category);
+    setIsUploadOpen(true);
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col font-sans text-slate-800 antialiased selection:bg-emerald-600 selection:text-white">
-      {/* Light Professional Sober Sticky Navbar */}
+      {/* Light Professional Sticky Navbar (Justonclick.in clean style) */}
       <Navbar shortName={societyData.shortName} />
 
       {/* Main Content Sections */}
       <main className="flex-1">
-        {/* Hero Section with 100% Real Images Background Slider */}
+        {/* Hero Section with Unique Tagline and 100% Real Images Background Slider */}
         <Hero
           shortName={societyData.shortName}
           tagline={societyData.tagline}
@@ -32,8 +51,25 @@ export function App() {
         {/* Verified Amenities (Dedicated Parking, Lift, Security, Utilities - No Hall) */}
         <Facilities amenities={societyData.amenities} />
 
-        {/* Photo & Video Function Collages (All Real Photos & Videos with Lightbox & Player) */}
-        <Gallery photos={societyData.photos} videos={societyData.videos} />
+        {/* Community Festivals & Celebrations (Holi, Men's Day, Diwali, National Days) */}
+        <Celebrations
+          celebrations={societyData.celebrations}
+          onSelectCategory={handleSelectCelebration}
+          onOpenUpload={handleOpenUploadFromCelebration}
+        />
+
+        {/* Photo & Video Function Collages with Interactive Upload Modal */}
+        <Gallery
+          photos={societyData.photos}
+          videos={societyData.videos}
+          externalSelectedCategory={selectedGalleryCategory}
+          isUploadModalOpen={isUploadOpen}
+          onCloseUploadModal={() => setIsUploadOpen(false)}
+          onOpenUploadModal={(cat) => {
+            if (cat) setSelectedGalleryCategory(cat);
+            setIsUploadOpen(true);
+          }}
+        />
 
         {/* Location & Nearby Connectivity (Station, Bus/Auto, Markets, Hospitals) */}
         <Location data={societyData} />
