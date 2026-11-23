@@ -1,15 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {
-  ShieldCheck,
+  ChevronLeft,
+  ChevronRight,
+  ArrowRight,
+  MapPin,
+  Sparkles,
   Building2,
   Car,
   ArrowUpDown,
-  ChevronLeft,
-  ChevronRight,
-  ExternalLink,
-  Images,
-  PartyPopper,
-  Sparkles,
+  ShieldCheck,
 } from 'lucide-react';
 import type { HeroSlide } from '../../types';
 
@@ -24,11 +23,7 @@ interface HeroProps {
 
 export const Hero: React.FC<HeroProps> = ({
   shortName,
-  tagline,
-  heroHeadline,
-  heroSubheadline,
   slides,
-  googleMapsUrl,
 }) => {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
@@ -75,116 +70,94 @@ export const Hero: React.FC<HeroProps> = ({
   return (
     <section
       id="home"
-      className="relative pt-28 pb-16 sm:pb-20 overflow-hidden bg-gradient-to-b from-slate-50 via-white to-slate-50 border-b border-slate-200/80"
+      className="relative pt-28 pb-14 sm:pb-20 overflow-hidden bg-gradient-to-b from-slate-50 via-white to-slate-50 border-b border-slate-200/80"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       aria-label="Shivganga CHS Home Showcase"
     >
-      {/* Soft Ambient Background Glow (Justonclick.in Modern Light Style) */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-emerald-100/40 via-emerald-50/20 to-transparent pointer-events-none rounded-full blur-3xl -z-10" />
+      {/* Soft Ambient Radial Background (Justonclick.in clean aesthetic) */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-6xl h-80 bg-gradient-to-b from-emerald-100/50 via-emerald-50/20 to-transparent pointer-events-none rounded-full blur-3xl -z-10 animate-pulse-glow" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Dual-Column Modern Light Hero Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
-          {/* Left Column: Typography, Tagline, CTAs & Specs */}
-          <div className="lg:col-span-6 space-y-6 text-left">
-            {/* Unique Tagline Pill Badge with Glowing Pulse */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white text-slate-800 text-xs font-semibold shadow-xs border border-slate-200">
+        {/* Dual-Column Minimal & High-Impact Hero Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+          {/* Left Column: Less Content, Clean & Ultra-Professional */}
+          <div className="lg:col-span-6 space-y-5 text-left">
+            {/* Minimal Status Pill Badge with Beacon Pulse */}
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white text-slate-800 text-xs font-semibold shadow-xs border border-slate-200/90">
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
               <span className="text-emerald-950 font-bold uppercase tracking-wider text-[11px]">
-                {tagline}
+                Standalone G+6 Living • MCS Act Registered
               </span>
             </div>
 
-            {/* Headline with High-Contrast Typography */}
-            <div className="space-y-1">
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-extrabold text-slate-900 tracking-tight leading-[1.15]">
-                {heroHeadline.split(' ')[0]} {heroHeadline.split(' ')[1]}{' '}
-                <span className="text-emerald-800 block sm:inline">
-                  {shortName}
-                </span>
+            {/* Concise, Bold Headline */}
+            <div>
+              <h1 className="text-4xl sm:text-5xl lg:text-5.5xl font-serif font-extrabold text-slate-900 tracking-tight leading-[1.12]">
+                {shortName}
               </h1>
-              <p className="text-xs uppercase tracking-widest font-bold text-emerald-700">
-                Standalone Ground + 6 Floors Residential Tower
+              <p className="text-xl sm:text-2xl text-emerald-800 font-sans font-medium mt-1.5 tracking-tight">
+                Quiet Comfort. Close-Knit Community.
               </p>
             </div>
 
-            {/* Subheadline */}
-            <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal max-w-xl">
-              {heroSubheadline}
+            {/* Short 1-Sentence Subtitle (Uncluttered) */}
+            <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal max-w-lg">
+              A standalone 6-floor residential tower offering dedicated resident ground parking, passenger elevator, and 24/7 security watch.
             </p>
 
-            {/* Action Buttons */}
+            {/* Just 2 Clean Action Buttons (Less content, more impact) */}
             <div className="pt-2 flex flex-wrap items-center gap-3">
               <a
                 href="#photos"
                 onClick={(e) => scrollToSection(e, '#photos')}
-                className="inline-flex items-center gap-2 px-5 py-3.5 rounded-2xl text-xs sm:text-sm font-bold text-white bg-emerald-700 hover:bg-emerald-800 transition-all duration-200 shadow-md hover:shadow-xl cursor-pointer hover:scale-102"
+                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl text-xs sm:text-sm font-bold text-white bg-emerald-700 hover:bg-emerald-800 transition-all duration-200 shadow-md hover:shadow-xl cursor-pointer hover:scale-102 group"
               >
-                <Images className="w-4 h-4 text-emerald-200" />
-                <span>Explore Photo Gallery</span>
+                <span>Explore Gallery & Collages</span>
+                <ArrowRight className="w-4 h-4 text-emerald-200 group-hover:translate-x-1 transition-transform" />
               </a>
 
               <a
-                href="#celebrations"
-                onClick={(e) => scrollToSection(e, '#celebrations')}
-                className="inline-flex items-center gap-2 px-5 py-3.5 rounded-2xl text-xs sm:text-sm font-bold text-slate-800 bg-white hover:bg-emerald-50 hover:text-emerald-900 transition-all duration-200 border border-slate-200 shadow-xs cursor-pointer hover:scale-102"
+                href="#location"
+                onClick={(e) => scrollToSection(e, '#location')}
+                className="inline-flex items-center gap-2 px-5 py-3.5 rounded-2xl text-xs sm:text-sm font-bold text-slate-700 bg-white hover:bg-slate-50 hover:text-emerald-900 transition-all duration-200 border border-slate-200 shadow-xs cursor-pointer hover:scale-102"
               >
-                <PartyPopper className="w-4 h-4 text-rose-500" />
-                <span>Celebrations</span>
-              </a>
-
-              <a
-                href={googleMapsUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-4 py-3.5 rounded-2xl text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all cursor-pointer"
-              >
-                <ExternalLink className="w-4 h-4 text-emerald-600" />
-                <span>Google Maps</span>
+                <MapPin className="w-4 h-4 text-emerald-600" />
+                <span>View Location Map</span>
               </a>
             </div>
 
-            {/* 4 Clean Architectural Spec Blocks (Justonclick.in Grid) */}
-            <div className="pt-4 grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-              <div className="p-3 rounded-2xl bg-white border border-slate-200/90 shadow-2xs hover:border-emerald-300 transition-colors">
-                <div className="flex items-center gap-1.5 text-emerald-700 mb-1">
-                  <Building2 className="w-3.5 h-3.5" />
-                  <span className="text-[10px] font-bold uppercase text-slate-500">Structure</span>
-                </div>
-                <div className="text-xs font-bold text-slate-900 leading-snug">G+6 Standalone</div>
-              </div>
-
-              <div className="p-3 rounded-2xl bg-white border border-slate-200/90 shadow-2xs hover:border-emerald-300 transition-colors">
-                <div className="flex items-center gap-1.5 text-emerald-700 mb-1">
-                  <Car className="w-3.5 h-3.5" />
-                  <span className="text-[10px] font-bold uppercase text-slate-500">Parking</span>
-                </div>
-                <div className="text-xs font-bold text-slate-900 leading-snug">Dedicated Bays</div>
-              </div>
-
-              <div className="p-3 rounded-2xl bg-white border border-slate-200/90 shadow-2xs hover:border-emerald-300 transition-colors">
-                <div className="flex items-center gap-1.5 text-emerald-700 mb-1">
-                  <ArrowUpDown className="w-3.5 h-3.5" />
-                  <span className="text-[10px] font-bold uppercase text-slate-500">Elevator</span>
-                </div>
-                <div className="text-xs font-bold text-slate-900 leading-snug">Passenger Lift</div>
-              </div>
-
-              <div className="p-3 rounded-2xl bg-white border border-slate-200/90 shadow-2xs hover:border-emerald-300 transition-colors">
-                <div className="flex items-center gap-1.5 text-emerald-700 mb-1">
-                  <ShieldCheck className="w-3.5 h-3.5" />
-                  <span className="text-[10px] font-bold uppercase text-slate-500">Security</span>
-                </div>
-                <div className="text-xs font-bold text-slate-900 leading-snug">24/7 Gate Watch</div>
-              </div>
+            {/* Minimal Inline Key Specs Strip (Clean, Not Bulky) */}
+            <div className="pt-3 flex flex-wrap items-center gap-3 text-xs font-semibold text-slate-600 border-t border-slate-200/80">
+              <span className="flex items-center gap-1.5 text-slate-800 bg-slate-100/80 px-2.5 py-1 rounded-lg">
+                <Building2 className="w-3.5 h-3.5 text-emerald-700" />
+                <span>G+6 Standalone</span>
+              </span>
+              <span className="flex items-center gap-1.5 text-slate-800 bg-slate-100/80 px-2.5 py-1 rounded-lg">
+                <Car className="w-3.5 h-3.5 text-emerald-700" />
+                <span>Dedicated Parking</span>
+              </span>
+              <span className="flex items-center gap-1.5 text-slate-800 bg-slate-100/80 px-2.5 py-1 rounded-lg">
+                <ArrowUpDown className="w-3.5 h-3.5 text-emerald-700" />
+                <span>Passenger Lift</span>
+              </span>
+              <span className="flex items-center gap-1.5 text-slate-800 bg-slate-100/80 px-2.5 py-1 rounded-lg">
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-700" />
+                <span>24/7 Security</span>
+              </span>
             </div>
           </div>
 
-          {/* Right Column: Daylight Building Slider in High-Tech Framed Showcase */}
-          <div className="lg:col-span-6">
+          {/* Right Column: Daylight Building Slider with Floating Badge Animation */}
+          <div className="lg:col-span-6 relative">
+            {/* Floating Glass Pill Badge (Justonclick.in Animation) */}
+            <div className="absolute -top-3 -right-2 z-30 hidden sm:inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/95 text-slate-800 text-xs font-bold shadow-lg border border-slate-200/90 backdrop-blur-md animate-float">
+              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+              <span className="text-emerald-950 font-bold">100% Real Building Photos</span>
+            </div>
+
             <div className="relative rounded-3xl overflow-hidden shadow-2xl border-2 border-slate-200/90 bg-slate-900 group aspect-4/3 sm:aspect-16/11">
-              {/* Slides with Full Daylight Clarity (No Heavy Dark Overlays) */}
+              {/* Slides in Full Daylight Colors */}
               {slides.map((slide, idx) => {
                 const isActive = idx === currentSlideIndex;
                 return (
@@ -206,20 +179,20 @@ export const Hero: React.FC<HeroProps> = ({
                 );
               })}
 
-              {/* Subtle Elegant Gradient on bottom for caption text */}
-              <div className="absolute inset-x-0 bottom-0 z-15 h-36 bg-gradient-to-t from-slate-950/85 via-slate-950/35 to-transparent pointer-events-none" />
+              {/* Bottom Subtle Vignette for Captions */}
+              <div className="absolute inset-x-0 bottom-0 z-15 h-32 bg-gradient-to-t from-slate-950/85 via-slate-950/30 to-transparent pointer-events-none" />
 
               {/* Floating Slide Badge at top-left */}
               <div className="absolute top-4 left-4 z-20">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white/95 text-slate-900 shadow-md backdrop-blur-md border border-slate-200">
-                  <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+                  <span className="w-2 h-2 rounded-full bg-emerald-600" />
                   <span>{activeSlide.badge}</span>
                 </span>
               </div>
 
               {/* Bottom Caption & Controls */}
               <div className="absolute bottom-4 left-4 right-4 z-20 flex items-end justify-between gap-4">
-                <div className="text-white max-w-sm">
+                <div className="text-white max-w-xs sm:max-w-sm">
                   <h3 className="font-serif font-bold text-base sm:text-lg text-white drop-shadow-sm leading-snug">
                     {activeSlide.title}
                   </h3>
