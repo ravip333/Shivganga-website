@@ -9,6 +9,7 @@ import {
   ExternalLink,
   Images,
   PartyPopper,
+  Sparkles,
 } from 'lucide-react';
 import type { HeroSlide } from '../../types';
 
@@ -74,176 +75,218 @@ export const Hero: React.FC<HeroProps> = ({
   return (
     <section
       id="home"
-      className="relative min-h-[92vh] flex items-center pt-24 pb-16 overflow-hidden bg-slate-950"
+      className="relative pt-28 pb-16 sm:pb-20 overflow-hidden bg-gradient-to-b from-slate-50 via-white to-slate-50 border-b border-slate-200/80"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
-      aria-label="Shivganga CHS Background Slider"
+      aria-label="Shivganga CHS Home Showcase"
     >
-      {/* Background Slides with Ken Burns subtle animation */}
-      <div className="absolute inset-0 z-0">
-        {slides.map((slide, idx) => {
-          const isActive = idx === currentSlideIndex;
-          return (
-            <div
-              key={slide.id}
-              className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-                isActive ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'
-              }`}
-            >
-              <img
-                src={slide.imageUrl}
-                alt={`${shortName} - ${slide.title}`}
-                className={`w-full h-full object-cover object-center filter brightness-[0.70] contrast-[1.08] transition-transform duration-[6000ms] ease-out ${
-                  isActive ? 'scale-106' : 'scale-100'
-                }`}
-                loading={idx === 0 ? 'eager' : 'lazy'}
-              />
+      {/* Soft Ambient Background Glow (Justonclick.in Modern Light Style) */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-emerald-100/40 via-emerald-50/20 to-transparent pointer-events-none rounded-full blur-3xl -z-10" />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Dual-Column Modern Light Hero Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+          {/* Left Column: Typography, Tagline, CTAs & Specs */}
+          <div className="lg:col-span-6 space-y-6 text-left">
+            {/* Unique Tagline Pill Badge with Glowing Pulse */}
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white text-slate-800 text-xs font-semibold shadow-xs border border-slate-200">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+              <span className="text-emerald-950 font-bold uppercase tracking-wider text-[11px]">
+                {tagline}
+              </span>
             </div>
-          );
-        })}
 
-        {/* Multi-layered vignette for optimal text readability */}
-        <div className="absolute inset-0 z-15 bg-gradient-to-t from-slate-950 via-slate-950/45 to-slate-950/70" />
-        <div className="absolute inset-0 z-15 bg-gradient-to-r from-slate-950/85 via-slate-950/35 to-transparent" />
-      </div>
+            {/* Headline with High-Contrast Typography */}
+            <div className="space-y-1">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-extrabold text-slate-900 tracking-tight leading-[1.15]">
+                {heroHeadline.split(' ')[0]} {heroHeadline.split(' ')[1]}{' '}
+                <span className="text-emerald-800 block sm:inline">
+                  {shortName}
+                </span>
+              </h1>
+              <p className="text-xs uppercase tracking-widest font-bold text-emerald-700">
+                Standalone Ground + 6 Floors Residential Tower
+              </p>
+            </div>
 
-      {/* Main Hero Content */}
-      <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-        <div className="max-w-3xl text-left">
-          {/* Unique Tagline Live Badge (Tech Agency / Modern Style) */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/95 backdrop-blur-md border border-white/60 text-slate-800 text-xs font-semibold mb-6 shadow-md shadow-black/10">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span className="text-emerald-950 font-bold uppercase tracking-wider text-[11px]">
-              {tagline}
-            </span>
+            {/* Subheadline */}
+            <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal max-w-xl">
+              {heroSubheadline}
+            </p>
+
+            {/* Action Buttons */}
+            <div className="pt-2 flex flex-wrap items-center gap-3">
+              <a
+                href="#photos"
+                onClick={(e) => scrollToSection(e, '#photos')}
+                className="inline-flex items-center gap-2 px-5 py-3.5 rounded-2xl text-xs sm:text-sm font-bold text-white bg-emerald-700 hover:bg-emerald-800 transition-all duration-200 shadow-md hover:shadow-xl cursor-pointer hover:scale-102"
+              >
+                <Images className="w-4 h-4 text-emerald-200" />
+                <span>Explore Photo Gallery</span>
+              </a>
+
+              <a
+                href="#celebrations"
+                onClick={(e) => scrollToSection(e, '#celebrations')}
+                className="inline-flex items-center gap-2 px-5 py-3.5 rounded-2xl text-xs sm:text-sm font-bold text-slate-800 bg-white hover:bg-emerald-50 hover:text-emerald-900 transition-all duration-200 border border-slate-200 shadow-xs cursor-pointer hover:scale-102"
+              >
+                <PartyPopper className="w-4 h-4 text-rose-500" />
+                <span>Celebrations</span>
+              </a>
+
+              <a
+                href={googleMapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-4 py-3.5 rounded-2xl text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all cursor-pointer"
+              >
+                <ExternalLink className="w-4 h-4 text-emerald-600" />
+                <span>Google Maps</span>
+              </a>
+            </div>
+
+            {/* 4 Clean Architectural Spec Blocks (Justonclick.in Grid) */}
+            <div className="pt-4 grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+              <div className="p-3 rounded-2xl bg-white border border-slate-200/90 shadow-2xs hover:border-emerald-300 transition-colors">
+                <div className="flex items-center gap-1.5 text-emerald-700 mb-1">
+                  <Building2 className="w-3.5 h-3.5" />
+                  <span className="text-[10px] font-bold uppercase text-slate-500">Structure</span>
+                </div>
+                <div className="text-xs font-bold text-slate-900 leading-snug">G+6 Standalone</div>
+              </div>
+
+              <div className="p-3 rounded-2xl bg-white border border-slate-200/90 shadow-2xs hover:border-emerald-300 transition-colors">
+                <div className="flex items-center gap-1.5 text-emerald-700 mb-1">
+                  <Car className="w-3.5 h-3.5" />
+                  <span className="text-[10px] font-bold uppercase text-slate-500">Parking</span>
+                </div>
+                <div className="text-xs font-bold text-slate-900 leading-snug">Dedicated Bays</div>
+              </div>
+
+              <div className="p-3 rounded-2xl bg-white border border-slate-200/90 shadow-2xs hover:border-emerald-300 transition-colors">
+                <div className="flex items-center gap-1.5 text-emerald-700 mb-1">
+                  <ArrowUpDown className="w-3.5 h-3.5" />
+                  <span className="text-[10px] font-bold uppercase text-slate-500">Elevator</span>
+                </div>
+                <div className="text-xs font-bold text-slate-900 leading-snug">Passenger Lift</div>
+              </div>
+
+              <div className="p-3 rounded-2xl bg-white border border-slate-200/90 shadow-2xs hover:border-emerald-300 transition-colors">
+                <div className="flex items-center gap-1.5 text-emerald-700 mb-1">
+                  <ShieldCheck className="w-3.5 h-3.5" />
+                  <span className="text-[10px] font-bold uppercase text-slate-500">Security</span>
+                </div>
+                <div className="text-xs font-bold text-slate-900 leading-snug">24/7 Gate Watch</div>
+              </div>
+            </div>
           </div>
 
-          {/* Main Heading with High-Contrast Typography */}
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-extrabold text-white tracking-tight leading-[1.14]">
-            {heroHeadline}
-          </h1>
+          {/* Right Column: Daylight Building Slider in High-Tech Framed Showcase */}
+          <div className="lg:col-span-6">
+            <div className="relative rounded-3xl overflow-hidden shadow-2xl border-2 border-slate-200/90 bg-slate-900 group aspect-4/3 sm:aspect-16/11">
+              {/* Slides with Full Daylight Clarity (No Heavy Dark Overlays) */}
+              {slides.map((slide, idx) => {
+                const isActive = idx === currentSlideIndex;
+                return (
+                  <div
+                    key={slide.id}
+                    className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
+                      isActive ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'
+                    }`}
+                  >
+                    <img
+                      src={slide.imageUrl}
+                      alt={`${shortName} - ${slide.title}`}
+                      className={`w-full h-full object-cover object-center transition-transform duration-[6000ms] ease-out brightness-[0.98] contrast-[1.02] ${
+                        isActive ? 'scale-105' : 'scale-100'
+                      }`}
+                      loading={idx === 0 ? 'eager' : 'lazy'}
+                    />
+                  </div>
+                );
+              })}
 
-          {/* Subheadline with Generous Readability */}
-          <p className="mt-4 text-base sm:text-lg text-slate-200 leading-relaxed font-normal max-w-2xl">
-            {heroSubheadline}
-          </p>
+              {/* Subtle Elegant Gradient on bottom for caption text */}
+              <div className="absolute inset-x-0 bottom-0 z-15 h-36 bg-gradient-to-t from-slate-950/85 via-slate-950/35 to-transparent pointer-events-none" />
 
-          {/* Current Active Slide Label */}
-          <div className="mt-4 flex items-center gap-2.5 text-xs font-medium text-emerald-300">
-            <span className="px-2.5 py-0.5 rounded-md bg-emerald-950/90 border border-emerald-500/50 text-[11px] font-bold uppercase tracking-wider">
-              {activeSlide.badge}
-            </span>
-            <span className="text-slate-300 font-medium">{activeSlide.title}</span>
-          </div>
-
-          {/* Action Buttons */}
-          <div className="mt-8 flex flex-wrap items-center gap-3.5">
-            <a
-              href="#photos"
-              onClick={(e) => scrollToSection(e, '#photos')}
-              className="inline-flex items-center gap-2 px-5 py-3.5 rounded-xl text-xs sm:text-sm font-bold text-slate-950 bg-white hover:bg-slate-100 transition-all shadow-lg hover:shadow-xl cursor-pointer hover:scale-102"
-            >
-              <Images className="w-4 h-4 text-emerald-700" />
-              <span>Explore Photo Gallery</span>
-            </a>
-
-            <a
-              href="#celebrations"
-              onClick={(e) => scrollToSection(e, '#celebrations')}
-              className="inline-flex items-center gap-2 px-5 py-3.5 rounded-xl text-xs sm:text-sm font-bold text-white bg-emerald-700 hover:bg-emerald-800 transition-all shadow-lg cursor-pointer hover:scale-102"
-            >
-              <PartyPopper className="w-4 h-4" />
-              <span>Festivals & Celebrations</span>
-            </a>
-
-            <a
-              href={googleMapsUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-3.5 rounded-xl text-xs sm:text-sm font-semibold text-white/95 hover:text-white border border-white/30 hover:border-white/60 bg-white/10 backdrop-blur-md transition-all cursor-pointer"
-            >
-              <ExternalLink className="w-4 h-4 text-emerald-400" />
-              <span>Google Maps</span>
-            </a>
-          </div>
-
-          {/* 4 Clean Key Specs Blocks (Modern Justonclick.in Grid) */}
-          <div className="mt-12 pt-6 border-t border-white/15 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-3.5 border border-white/15 text-white hover:bg-white/15 transition-all">
-              <div className="flex items-center gap-1.5 text-emerald-400 mb-1">
-                <Building2 className="w-4 h-4" />
-                <span className="text-[11px] font-semibold text-slate-300">Architecture</span>
+              {/* Floating Slide Badge at top-left */}
+              <div className="absolute top-4 left-4 z-20">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white/95 text-slate-900 shadow-md backdrop-blur-md border border-slate-200">
+                  <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>{activeSlide.badge}</span>
+                </span>
               </div>
-              <div className="text-sm font-bold text-white">Ground + 6 Floors</div>
-              <div className="text-[10px] text-slate-400 mt-0.5">Standalone Tower</div>
+
+              {/* Bottom Caption & Controls */}
+              <div className="absolute bottom-4 left-4 right-4 z-20 flex items-end justify-between gap-4">
+                <div className="text-white max-w-sm">
+                  <h3 className="font-serif font-bold text-base sm:text-lg text-white drop-shadow-sm leading-snug">
+                    {activeSlide.title}
+                  </h3>
+                  <p className="text-xs text-slate-200 line-clamp-1 mt-0.5">
+                    {activeSlide.subtitle}
+                  </p>
+                </div>
+
+                {/* Slider Controls (Previous / Slide Counter / Next) */}
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <button
+                    type="button"
+                    onClick={prevSlide}
+                    className="p-2 rounded-full bg-black/50 hover:bg-black/75 text-white backdrop-blur-md border border-white/20 transition-all cursor-pointer"
+                    aria-label="Previous slide"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                  </button>
+
+                  <div className="px-2.5 py-1 rounded-full bg-black/50 backdrop-blur-md border border-white/20 text-xs font-mono font-bold text-white tracking-wider">
+                    <span className="text-emerald-400">0{currentSlideIndex + 1}</span>
+                    <span className="text-white/40 mx-0.5">/</span>
+                    <span>0{slides.length}</span>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={nextSlide}
+                    className="p-2 rounded-full bg-black/50 hover:bg-black/75 text-white backdrop-blur-md border border-white/20 transition-all cursor-pointer"
+                    aria-label="Next slide"
+                  >
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Live Progress Bar on the bottom of the card */}
+              <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20 z-25">
+                <div
+                  className="h-full bg-emerald-500 transition-all ease-linear"
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
             </div>
 
-            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-3.5 border border-white/15 text-white hover:bg-white/15 transition-all">
-              <div className="flex items-center gap-1.5 text-emerald-400 mb-1">
-                <Car className="w-4 h-4" />
-                <span className="text-[11px] font-semibold text-slate-300">Parking</span>
-              </div>
-              <div className="text-sm font-bold text-white">Dedicated Bays</div>
-              <div className="text-[10px] text-slate-400 mt-0.5">Demarcated Slots</div>
-            </div>
-
-            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-3.5 border border-white/15 text-white hover:bg-white/15 transition-all">
-              <div className="flex items-center gap-1.5 text-emerald-400 mb-1">
-                <ArrowUpDown className="w-4 h-4" />
-                <span className="text-[11px] font-semibold text-slate-300">Elevator</span>
-              </div>
-              <div className="text-sm font-bold text-white">Passenger Lift</div>
-              <div className="text-[10px] text-slate-400 mt-0.5">Ground to 6th Floor</div>
-            </div>
-
-            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-3.5 border border-white/15 text-white hover:bg-white/15 transition-all">
-              <div className="flex items-center gap-1.5 text-emerald-400 mb-1">
-                <ShieldCheck className="w-4 h-4" />
-                <span className="text-[11px] font-semibold text-slate-300">Security</span>
-              </div>
-              <div className="text-sm font-bold text-white">24/7 Gate Watch</div>
-              <div className="text-[10px] text-slate-400 mt-0.5">Manned Checkpost</div>
+            {/* Thumbnail Mini-Bar Below Slider */}
+            <div className="mt-3 flex items-center justify-center gap-2 overflow-x-auto py-1">
+              {slides.map((s, i) => (
+                <button
+                  key={s.id}
+                  onClick={() => {
+                    setCurrentSlideIndex(i);
+                    setProgress(0);
+                  }}
+                  className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer border ${
+                    i === currentSlideIndex
+                      ? 'bg-emerald-50 text-emerald-950 border-emerald-400 font-bold shadow-xs'
+                      : 'bg-white hover:bg-slate-100 text-slate-600 border-slate-200'
+                  }`}
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
+                  <span>{s.badge}</span>
+                </button>
+              ))}
             </div>
           </div>
         </div>
-      </div>
-
-      {/* Auto Slider Controls with Numbered Slide Indicator */}
-      <div className="absolute right-4 sm:right-8 bottom-6 z-30 flex items-center gap-3">
-        {/* Previous Button */}
-        <button
-          type="button"
-          onClick={prevSlide}
-          className="p-2.5 rounded-full bg-white/15 hover:bg-white/30 text-white backdrop-blur-md border border-white/20 transition-all focus:outline-none cursor-pointer"
-          aria-label="Previous slide"
-        >
-          <ChevronLeft className="w-4 h-4" />
-        </button>
-
-        {/* Slide Counter e.g. 01 / 04 */}
-        <div className="px-3.5 py-1.5 rounded-full bg-black/50 backdrop-blur-md border border-white/20 text-xs font-mono font-bold text-white tracking-wider">
-          <span className="text-emerald-400">0{currentSlideIndex + 1}</span>
-          <span className="text-white/40 mx-1">/</span>
-          <span>0{slides.length}</span>
-        </div>
-
-        {/* Next Button */}
-        <button
-          type="button"
-          onClick={nextSlide}
-          className="p-2.5 rounded-full bg-white/15 hover:bg-white/30 text-white backdrop-blur-md border border-white/20 transition-all focus:outline-none cursor-pointer"
-          aria-label="Next slide"
-        >
-          <ChevronRight className="w-4 h-4" />
-        </button>
-      </div>
-
-      {/* Subtle Auto Slider Progress Line at bottom */}
-      <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/10 z-30">
-        <div
-          className="h-full bg-emerald-500 transition-all ease-linear"
-          style={{ width: `${progress}%` }}
-        />
       </div>
     </section>
   );

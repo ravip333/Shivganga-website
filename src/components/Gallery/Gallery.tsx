@@ -31,7 +31,7 @@ interface GalleryProps {
 
 export const Gallery: React.FC<GalleryProps> = ({
   photos: initialPhotos,
-  videos,
+  videos: initialVideos,
   externalSelectedCategory,
   isUploadModalOpen: externalIsUploadOpen,
   onCloseUploadModal: externalCloseUpload,
@@ -51,6 +51,22 @@ export const Gallery: React.FC<GalleryProps> = ({
       // fallback
     }
     return initialPhotos;
+  });
+
+  const [videosList, setVideosList] = useState<VideoItem[]>(() => {
+    // Check localStorage for resident uploaded videos
+    try {
+      const stored = localStorage.getItem('shivganga_user_videos');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return [...parsed, ...initialVideos];
+        }
+      }
+    } catch {
+      // fallback
+    }
+    return initialVideos;
   });
 
   const [activeCategory, setActiveCategory] = useState<MediaCategory>(
@@ -98,12 +114,24 @@ export const Gallery: React.FC<GalleryProps> = ({
     setActiveCategory(targetCategory);
   };
 
+  const handleNewVideos = (newVideos: VideoItem[]) => {
+    const updated = [...newVideos, ...videosList];
+    setVideosList(updated);
+    try {
+      const existing = JSON.parse(localStorage.getItem('shivganga_user_videos') || '[]');
+      localStorage.setItem('shivganga_user_videos', JSON.stringify([...newVideos, ...existing]));
+    } catch {
+      // ignore storage error
+    }
+    setActiveCategory('videos');
+  };
+
   const categories: { id: MediaCategory; label: string; icon: React.ReactNode; count: number }[] = [
     {
       id: 'all',
       label: 'All Media',
       icon: <Images className="w-3.5 h-3.5" />,
-      count: photosList.length + videos.length,
+      count: photosList.length + videosList.length,
     },
     {
       id: 'elevation',
@@ -145,7 +173,7 @@ export const Gallery: React.FC<GalleryProps> = ({
       id: 'videos',
       label: 'Walkthrough Videos',
       icon: <Film className="w-3.5 h-3.5" />,
-      count: videos.length,
+      count: videosList.length,
     },
   ];
 
@@ -285,7 +313,7 @@ export const Gallery: React.FC<GalleryProps> = ({
             )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-              {videos.map((vid) => (
+              {videosList.map((vid) => (
                 <div
                   key={vid.id}
                   onClick={() => setActiveVideo(vid)}
@@ -356,11 +384,12 @@ export const Gallery: React.FC<GalleryProps> = ({
         onClose={() => setActiveVideo(null)}
       />
 
-      {/* Photo Upload Modal for Celebrations */}
+      {/* Photo & Video Upload Modal for Celebrations */}
       <PhotoUploadModal
         isOpen={isUploadOpen}
         onClose={handleCloseUpload}
         onUploadPhotos={handleNewUpload}
+        onUploadVideos={handleNewVideos}
         initialCategory={uploadTargetCategory}
       />
     </section>

@@ -1,11 +1,19 @@
 import React, { useState, useRef } from 'react';
-import { X, Upload, Image as ImageIcon, CheckCircle2, Sparkles, AlertCircle } from 'lucide-react';
-import type { MediaCategory, PhotoItem } from '../../types';
+import { X, Upload, Image as ImageIcon, Video as VideoIcon, CheckCircle2, Sparkles, AlertCircle, Share2 } from 'lucide-react';
+import type { MediaCategory, PhotoItem, VideoItem } from '../../types';
+
+interface MediaFilePreview {
+  type: 'image' | 'video';
+  dataUrl: string;
+  fileName: string;
+  fileSize: string;
+}
 
 interface PhotoUploadModalProps {
   isOpen: boolean;
   onClose: () => void;
   onUploadPhotos: (newPhotos: PhotoItem[], targetCategory: MediaCategory) => void;
+  onUploadVideos?: (newVideos: VideoItem[]) => void;
   initialCategory?: MediaCategory;
 }
 
@@ -13,6 +21,7 @@ export const PhotoUploadModal: React.FC<PhotoUploadModalProps> = ({
   isOpen,
   onClose,
   onUploadPhotos,
+  onUploadVideos,
   initialCategory = 'holi',
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<MediaCategory>(
@@ -21,7 +30,7 @@ export const PhotoUploadModal: React.FC<PhotoUploadModalProps> = ({
   const [title, setTitle] = useState('');
   const [caption, setCaption] = useState('');
   const [date, setDate] = useState('');
-  const [previews, setPreviews] = useState<string[]>([]);
+  const [mediaPreviews, setMediaPreviews] = useState<MediaFilePreview[]>([]);
   const [errorMsg, setErrorMsg] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -35,6 +44,7 @@ export const PhotoUploadModal: React.FC<PhotoUploadModalProps> = ({
     { id: 'national', label: 'Republic & Independence Day', badge: 'Flag Hoisting' },
     { id: 'elevation', label: 'Building Elevation (G+6)', badge: 'Architecture' },
     { id: 'parking', label: 'Dedicated Parking & Campus', badge: 'Ground Level' },
+    { id: 'videos', label: 'Campus Walkthrough Videos', badge: 'Video Clips' },
   ];
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,14 +53,27 @@ export const PhotoUploadModal: React.FC<PhotoUploadModalProps> = ({
     if (!files || files.length === 0) return;
 
     Array.from(files).forEach((file) => {
-      if (!file.type.startsWith('image/')) {
-        setErrorMsg('Please select valid image files (JPG, PNG, WebP).');
+      const isImage = file.type.startsWith('image/');
+      const isVideo = file.type.startsWith('video/');
+
+      if (!isImage && !isVideo) {
+        setErrorMsg('Please select valid photos (JPG, PNG, WebP) or video clips (MP4, WebM, MOV).');
         return;
       }
+
+      const sizeInMB = (file.size / (1024 * 1024)).toFixed(1);
       const reader = new FileReader();
       reader.onload = (event) => {
         if (event.target?.result) {
-          setPreviews((prev) => [...prev, event.target!.result as string]);
+          setMediaPreviews((prev) => [
+            ...prev,
+            {
+              type: isVideo ? 'video' : 'image',
+              dataUrl: event.target!.result as string,
+              fileName: file.name,
+              fileSize: `${sizeInMB} MB`,
+            },
+          ]);
         }
       };
       reader.readAsDataURL(file);
@@ -58,40 +81,70 @@ export const PhotoUploadModal: React.FC<PhotoUploadModalProps> = ({
   };
 
   const handleRemovePreview = (index: number) => {
-    setPreviews((prev) => prev.filter((_, i) => i !== index));
+    setMediaPreviews((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (previews.length === 0) {
-      setErrorMsg('Please select at least one photo to upload.');
+    if (mediaPreviews.length === 0) {
+      setErrorMsg('Please select at least one photo or video clip to upload.');
       return;
     }
 
     const matchedCategory = categoryOptions.find((c) => c.id === selectedCategory);
     const categoryLabel = matchedCategory?.label || 'Society Event';
 
-    const newPhotoItems: PhotoItem[] = previews.map((dataUrl, idx) => ({
-      id: `user-upload-${Date.now()}-${idx}`,
-      title: title.trim() || `${categoryLabel} Photo ${idx + 1}`,
-      category: selectedCategory,
-      categoryLabel: categoryLabel,
-      imageUrl: dataUrl,
-      caption: caption.trim() || `Uploaded photo from ${categoryLabel}`,
-      date: date.trim() || new Date().toLocaleDateString('en-IN', { month: 'short', year: 'numeric' }),
-      featured: idx === 0,
-    }));
+    const imageItems: PhotoItem[] = [];
+    const videoItems: VideoItem[] = [];
 
-    onUploadPhotos(newPhotoItems, selectedCategory);
+    mediaPreviews.forEach((item, idx) => {
+      if (item.type === 'video') {
+        videoItems.push({
+          id: `user-video-${Date.now()}-${idx}`,
+          title: title.trim() || `${categoryLabel} Video ${idx + 1}`,
+          duration: 'Community Clip',
+          videoUrl: item.dataUrl,
+          thumbnailUrl: item.dataUrl,
+          caption: caption.trim() || `Uploaded video from ${categoryLabel}`,
+          category: categoryLabel,
+        });
+      } else {
+        imageItems.push({
+          id: `user-upload-${Date.now()}-${idx}`,
+          title: title.trim() || `${categoryLabel} Photo ${idx + 1}`,
+          category: selectedCategory === 'videos' ? 'festivals' : selectedCategory,
+          categoryLabel: categoryLabel,
+          imageUrl: item.dataUrl,
+          caption: caption.trim() || `Uploaded photo from ${categoryLabel}`,
+          date: date.trim() || new Date().toLocaleDateString('en-IN', { month: 'short', year: 'numeric' }),
+          featured: idx === 0,
+        });
+      }
+    });
+
+    if (imageItems.length > 0) {
+      onUploadPhotos(imageItems, selectedCategory);
+    }
+    if (videoItems.length > 0 && onUploadVideos) {
+      onUploadVideos(videoItems);
+    }
+
     setIsSuccess(true);
     setTimeout(() => {
       setIsSuccess(false);
-      setPreviews([]);
+      setMediaPreviews([]);
       setTitle('');
       setCaption('');
       setDate('');
       onClose();
     }, 1200);
+  };
+
+  const generateWhatsAppShareLink = () => {
+    const text = encodeURIComponent(
+      `Hello Shivganga CHS Management, I have new photos/videos for ${categoryOptions.find((c) => c.id === selectedCategory)?.label || 'society celebration'} to share for the official society website.`
+    );
+    return `https://wa.me/?text=${text}`;
   };
 
   return (
@@ -114,10 +167,10 @@ export const PhotoUploadModal: React.FC<PhotoUploadModalProps> = ({
             </div>
             <div>
               <h3 id="upload-modal-title" className="text-base sm:text-lg font-serif font-bold text-slate-900">
-                Upload Society Photos
+                Upload Society Photos & Videos
               </h3>
               <p className="text-xs text-slate-500">
-                Add celebration photos for Holi, Men's Day, Diwali, or Campus.
+                Add photos or video walkthroughs for Holi, Men's Day, Diwali, or Campus.
               </p>
             </div>
           </div>
@@ -142,14 +195,14 @@ export const PhotoUploadModal: React.FC<PhotoUploadModalProps> = ({
           {isSuccess && (
             <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center gap-2.5">
               <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
-              <span className="font-semibold">Photos added successfully! Updating gallery...</span>
+              <span className="font-semibold">Media added successfully! Updating gallery...</span>
             </div>
           )}
 
           {/* 1. Category Selector */}
           <div>
             <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">
-              1. Select Celebration / Photo Category *
+              1. Select Celebration / Media Category *
             </label>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {categoryOptions.map((cat) => {
@@ -173,16 +226,16 @@ export const PhotoUploadModal: React.FC<PhotoUploadModalProps> = ({
             </div>
           </div>
 
-          {/* 2. Photo File Picker & Dropzone */}
+          {/* 2. Photo & Video File Picker & Dropzone */}
           <div>
             <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">
-              2. Choose Photos From Your Device *
+              2. Choose Photos or Videos From Your Device *
             </label>
 
             <input
               ref={fileInputRef}
               type="file"
-              accept="image/*"
+              accept="image/*,video/*"
               multiple
               onChange={handleFileChange}
               className="hidden"
@@ -192,44 +245,65 @@ export const PhotoUploadModal: React.FC<PhotoUploadModalProps> = ({
               onClick={() => fileInputRef.current?.click()}
               className="border-2 border-dashed border-slate-300 hover:border-emerald-500 rounded-2xl p-6 text-center cursor-pointer bg-slate-50/60 hover:bg-emerald-50/30 transition-all group"
             >
-              <div className="w-12 h-12 rounded-2xl bg-white shadow-xs mx-auto mb-3 flex items-center justify-center text-slate-500 group-hover:text-emerald-700 group-hover:scale-105 transition-all">
-                <ImageIcon className="w-6 h-6" />
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <div className="w-10 h-10 rounded-xl bg-white shadow-xs flex items-center justify-center text-emerald-700 group-hover:scale-105 transition-all">
+                  <ImageIcon className="w-5 h-5" />
+                </div>
+                <div className="w-10 h-10 rounded-xl bg-white shadow-xs flex items-center justify-center text-emerald-700 group-hover:scale-105 transition-all">
+                  <VideoIcon className="w-5 h-5" />
+                </div>
               </div>
               <p className="text-xs sm:text-sm font-semibold text-slate-800">
-                Click to browse or drop your photos here
+                Click to browse or drop your photos & videos here
               </p>
               <p className="text-[11px] text-slate-500 mt-1">
-                Supports multiple JPG, PNG, and WebP images
+                Supports JPG, PNG, WebP photos & MP4, WebM video clips
               </p>
             </div>
 
-            {/* Preview Grid */}
-            {previews.length > 0 && (
+            {/* Media Previews Grid */}
+            {mediaPreviews.length > 0 && (
               <div className="mt-4">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-xs font-semibold text-slate-700">
-                    Selected Photos ({previews.length})
+                    Selected Files ({mediaPreviews.length})
                   </span>
                   <button
                     type="button"
-                    onClick={() => setPreviews([])}
+                    onClick={() => setMediaPreviews([])}
                     className="text-[11px] text-rose-600 hover:underline cursor-pointer"
                   >
                     Clear All
                   </button>
                 </div>
-                <div className="grid grid-cols-3 sm:grid-cols-4 gap-2.5">
-                  {previews.map((src, i) => (
-                    <div key={i} className="relative aspect-square rounded-xl overflow-hidden border border-slate-200 group">
-                      <img src={src} alt={`Preview ${i + 1}`} className="w-full h-full object-cover" />
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                  {mediaPreviews.map((item, i) => (
+                    <div key={i} className="relative aspect-video rounded-xl overflow-hidden border border-slate-200 group bg-slate-900">
+                      {item.type === 'video' ? (
+                        <video src={item.dataUrl} className="w-full h-full object-cover" muted />
+                      ) : (
+                        <img src={item.dataUrl} alt={`Preview ${i + 1}`} className="w-full h-full object-cover" />
+                      )}
+
+                      <div className="absolute top-1 left-1">
+                        <span className="px-1.5 py-0.5 rounded text-[9px] font-bold uppercase bg-black/70 text-white backdrop-blur-xs flex items-center gap-1">
+                          {item.type === 'video' ? <VideoIcon className="w-2.5 h-2.5 text-emerald-400" /> : <ImageIcon className="w-2.5 h-2.5 text-emerald-400" />}
+                          {item.type}
+                        </span>
+                      </div>
+
                       <button
                         type="button"
                         onClick={() => handleRemovePreview(i)}
                         className="absolute top-1 right-1 p-1 rounded-full bg-slate-900/80 text-white hover:bg-rose-600 transition-colors"
-                        aria-label="Remove photo"
+                        aria-label="Remove item"
                       >
                         <X className="w-3.5 h-3.5" />
                       </button>
+
+                      <div className="absolute bottom-1 right-1 text-[9px] text-white/90 bg-black/60 px-1 rounded">
+                        {item.fileSize}
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -241,7 +315,7 @@ export const PhotoUploadModal: React.FC<PhotoUploadModalProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-                Photo Title / Event Name
+                Title / Caption
               </label>
               <input
                 type="text"
@@ -268,7 +342,7 @@ export const PhotoUploadModal: React.FC<PhotoUploadModalProps> = ({
 
           <div>
             <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-              Brief Caption / Description (Optional)
+              Description (Optional)
             </label>
             <input
               type="text"
@@ -279,31 +353,51 @@ export const PhotoUploadModal: React.FC<PhotoUploadModalProps> = ({
             />
           </div>
 
-          {/* Guidelines note */}
-          <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-[11px] text-slate-500 flex items-start gap-2">
-            <Sparkles className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-            <span>
-              Uploaded celebration photos will appear immediately in the photo gallery and are saved in your browser.
-            </span>
+          {/* Guidelines note with 1-Click WhatsApp Committee Share */}
+          <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 text-[11px] text-slate-600">
+            <div className="flex items-start gap-2">
+              <Sparkles className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+              <span>
+                <strong>Instant View:</strong> Files uploaded here will immediately appear in your browser gallery.
+              </span>
+            </div>
+            <div className="flex items-start gap-2">
+              <Share2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+              <span>
+                <strong>Permanent Archiving:</strong> Want your original high-resolution photos/videos included in the permanent website build? You can send them directly to the society admin on WhatsApp.
+              </span>
+            </div>
           </div>
 
-          {/* Footer Submit */}
-          <div className="pt-2 flex items-center justify-end gap-3">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer"
+          {/* Footer Submit & WhatsApp Option */}
+          <div className="pt-2 flex flex-wrap items-center justify-between gap-3">
+            <a
+              href={generateWhatsAppShareLink()}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 transition-colors"
             >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={previews.length === 0}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-semibold text-white bg-emerald-700 hover:bg-emerald-800 disabled:opacity-50 transition-all cursor-pointer shadow-sm shadow-emerald-900/10"
-            >
-              <Upload className="w-4 h-4" />
-              <span>Add to Society Gallery ({previews.length})</span>
-            </button>
+              <Share2 className="w-3.5 h-3.5" />
+              <span>Send via WhatsApp</span>
+            </a>
+
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={onClose}
+                className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={mediaPreviews.length === 0}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-emerald-700 hover:bg-emerald-800 disabled:opacity-50 transition-all cursor-pointer shadow-sm shadow-emerald-900/10"
+              >
+                <Upload className="w-4 h-4" />
+                <span>Add to Gallery ({mediaPreviews.length})</span>
+              </button>
+            </div>
           </div>
         </form>
       </div>
