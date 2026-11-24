@@ -2,11 +2,8 @@ import { useState } from 'react';
 import { Navbar } from './components/Navbar/Navbar';
 import { Hero } from './components/Hero/Hero';
 import { AboutSociety } from './components/AboutSociety/AboutSociety';
-import { Facilities } from './components/Facilities/Facilities';
-import { Celebrations } from './components/Celebrations/Celebrations';
 import { Gallery } from './components/Gallery/Gallery';
 import { Location } from './components/Location/Location';
-import { Contact } from './components/Contact/Contact';
 import { Footer } from './components/Footer/Footer';
 import { societyData } from './data/societyData';
 import type { MediaCategory } from './types';
@@ -15,27 +12,14 @@ export function App() {
   const [selectedGalleryCategory, setSelectedGalleryCategory] = useState<MediaCategory>('all');
   const [isUploadOpen, setIsUploadOpen] = useState(false);
 
-  const handleSelectCelebration = (category: MediaCategory) => {
-    setSelectedGalleryCategory(category);
-    const photosEl = document.getElementById('photos');
-    if (photosEl) {
-      photosEl.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-  const handleOpenUploadFromCelebration = (category: MediaCategory) => {
-    setSelectedGalleryCategory(category);
-    setIsUploadOpen(true);
-  };
-
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col font-sans text-slate-800 antialiased selection:bg-emerald-600 selection:text-white">
-      {/* Light Professional Sticky Navbar (Justonclick.in clean style) */}
+      {/* Light Professional Sticky Navbar (4 Clean Links) */}
       <Navbar shortName={societyData.shortName} />
 
-      {/* Main Content Sections */}
+      {/* Main Content Sections - Streamlined & Uncluttered */}
       <main className="flex-1">
-        {/* Hero Section with Unique Tagline and 100% Real Images Background Slider */}
+        {/* 1. Hero Section - Minimalist & Visual */}
         <Hero
           shortName={societyData.shortName}
           tagline={societyData.tagline}
@@ -45,20 +29,10 @@ export function App() {
           googleMapsUrl={societyData.contact.googleMapsUrl}
         />
 
-        {/* About Standalone 6-Floor Building (G+6) with Verified MCS Act Registration */}
+        {/* 2. About & Amenities Combined - 4 Clean Visual Cards with Zero Fluff */}
         <AboutSociety data={societyData} />
 
-        {/* Verified Amenities (Dedicated Parking, Lift, Security, Utilities - No Hall) */}
-        <Facilities amenities={societyData.amenities} />
-
-        {/* Community Festivals & Celebrations (Holi, Men's Day, Diwali, National Days) */}
-        <Celebrations
-          celebrations={societyData.celebrations}
-          onSelectCategory={handleSelectCelebration}
-          onOpenUpload={handleOpenUploadFromCelebration}
-        />
-
-        {/* Photo & Video Function Collages with Interactive Upload Modal */}
+        {/* 3. Visual Media & Celebrations Collages (Holi, Men's Day, Diwali, Parking, Videos) */}
         <Gallery
           photos={societyData.photos}
           videos={societyData.videos}
@@ -71,14 +45,11 @@ export function App() {
           }}
         />
 
-        {/* Location & Nearby Connectivity (Station, Bus/Auto, Markets, Hospitals) */}
+        {/* 4. Location, Directions & Google Map with Helplines */}
         <Location data={societyData} />
-
-        {/* Building Guidelines & Emergency Contacts (No Office Desk) */}
-        <Contact data={societyData} />
       </main>
 
-      {/* Professional Sober Footer */}
+      {/* Clean Modern Footer */}
       <Footer data={societyData} />
     </div>
   );

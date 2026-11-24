@@ -13,12 +13,9 @@ export const Footer: React.FC<FooterProps> = ({ data }) => {
 
   const navLinks = [
     { label: 'Home', href: '#home' },
-    { label: 'About Building', href: '#about' },
-    { label: 'Building Amenities', href: '#amenities' },
-    { label: 'Celebrations & Festivals', href: '#celebrations' },
+    { label: 'About & Amenities', href: '#about' },
     { label: 'Photo & Video Collages', href: '#photos' },
-    { label: 'Directions & Connectivity', href: '#location' },
-    { label: 'Building Guidelines', href: '#contact' },
+    { label: 'Location Map & Directions', href: '#location' },
   ];
 
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {

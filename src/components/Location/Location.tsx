@@ -116,6 +116,15 @@ export const Location: React.FC<LocationProps> = ({ data }) => {
                   <strong>Resident & Visitor Parking:</strong> Clear driveway access leading directly to demarcated ground parking bays.
                 </div>
               </div>
+
+              {/* Emergency & Gate Contacts Strip */}
+              <div className="pt-2 border-t border-slate-100 flex flex-wrap gap-2 text-[11px] text-slate-500">
+                <span className="font-semibold text-slate-700">Gate Intercom: Main Desk</span>
+                <span>•</span>
+                <span>Police: 100/112</span>
+                <span>•</span>
+                <span>Ambulance: 102/108</span>
+              </div>
             </div>
 
             {/* Quick Action Buttons (Copy Address / Open Google Maps) */}
